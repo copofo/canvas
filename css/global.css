@@ -183,6 +183,7 @@ div #cima, #baixo, #esquerda, #direita{
   bottom: 0;
   margin: auto;
   position: absolute;
+  
 }
 
 #c3{
@@ -199,6 +200,7 @@ div #cima, #baixo, #esquerda, #direita{
   left: 0.5em;
   margin: auto;
   position: absolute;
+  
 }
 
 #tri{

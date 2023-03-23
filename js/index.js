@@ -3,7 +3,8 @@ const f = {
   left: () => document.getElementById('esquerda'),
   right: () => document.getElementById('direita'),
   bottom: () => document.getElementById('baixo'),
-  c3: () => document.getElementById('c3')
+  c3: () => document.getElementById('c3'),
+  c2: () => document.getElementById('c2')
 }
 
 
@@ -22,35 +23,36 @@ var ctx = canvas.getContext("2d");
 
 
 
-var movTop = movLeft = movBottom = movRigth = false
-var speed = 0;
-var speed2 = 0;
-var sizeWidth = 25
-var sizeHeight = 7.5
-var posX = 0
-var posY = 0
-var objColor = "#00f"
-var blockX = canvas.width / 2 - 25;
-var blockY = canvas.height / 2 - 25;
-var contWidth;
-var velCima = 1
-var velDir = 3.3
-var coords = canvas.getBoundingClientRect()
+var movTop = movLeft = movBottom = movRigth = zMais = zMenos = false
+var speed = 2;
+
+
+
+
+
+
 
 
 var srcX = 0;
 var srcY = 0;
 var size = 400;
 
+
 var map = new Image();
 map.src = "img/map.png"
-map.onload= render()
+var mapWidth = 4500
+map.onload= loop()
+
 
 function render(){
   
   ctx.clearRect(0,0,canvas.width,canvas.height)
   
   ctx.drawImage(map,srcX,srcY,size,size,0,0,canvas.width,canvas.height)
+  
+  movMap();
+  blockMap();
+  
   
 }
 
@@ -62,89 +64,149 @@ function update(){
 
 function loop(){
   
-  
+  requestAnimationFrame(loop,canvas)
+  render()
   
 }
 
 
 
-
-var next = document.getElementById('next')
-
-
-
-
-function coliser(){
-  if(posX + sizeWidth > blockX && posX < blockX + sizeWidth && posY + sizeHeight > blockY && posY < blockY + sizeHeight){
+function movMap(){
+  
+  switch (true) {
+    case movRigth:
+      srcX += 2;
+      break;
     
-    if(movTop){posY = posY + velCima + speed}
-    if(movRigth){posX = posX - velDir - speed2}
-    if(movLeft){posX = posX + velDir + speed2}
-    if(movBottom){posY = posY - velCima - speed}
-    objColor = "#f00"
-    
-    
-  } else{
-    objColor = "#00f"
-  }
-}
-
-
-
-
-
-
-
-
-
-function updateBlock(){
-  if(movLeft){
-    posX = posX - (velDir + speed2);
-    if(posX + canvas.width < canvas.width){
+    case movLeft:
+      srcX -= 2;
+      break;
       
-      posX = posX + velDir + speed2
+    case movTop:
+      srcY -= 2;
+      break;  
+      
+    case movBottom:
+      srcY += 2;
+      break;  
+      
+    case zMenos:
+      size += speed;
+      break;
+    
+    case zMais:
+      size -= speed;
+      break;
+  }
+  
+  
+  
+}
+
+
+function blockMap(){
+  
+  if(movLeft){
+    
+    if(srcX + canvas.width < canvas.width){
+      
+      srcX = srcX + 2
       
     
     }
     
   }
+  
+
+  
   if(movRigth){
-    posX = posX + velDir + speed2;
-    if(posX + sizeWidth > canvas.width){
-     posX = posX - velDir - speed2
+    
+    if(srcX + size > 4500){
+     srcX = srcX - 2
      
     }
   }
+  
+
+  
+  
   if(movBottom){
-    posY = posY + velCima + speed;
-    if(posY + sizeHeight > canvas.height){
-      posY = posY - velCima - speed;
+    
+    if(srcY + size > 2234){
+      srcY = srcY - 2
         
     }
     
   }
+  
+  
+  
+  
   if(movTop){
-    posY = posY - velCima - speed;
-  }
-  if(posY + canvas.height < canvas.height){
-    posY = posY + velCima + speed;
+    
+    if(srcY + canvas.height < canvas.height){
+      srcY = srcY + 2
+    }
     
   }
+  
+  
+  
+  
+  
   
 }
 
 
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+f.c2().addEventListener('touchstart', ()=>{
+  zMais = true;
+  f.c3().style.background = "black"
+  speed = velCima;
+  speed2 = velDir;
+})
+
+f.c2().addEventListener('touchend', ()=>{
+  
+  zMais = false;
+  speed = 0;
+  
+  speed2 = 0;
+  f.c3().style.background = "gray"
+})
+
+
+
+
+
 f.c3().addEventListener('touchstart', ()=>{
+  zMenos = true;
   f.c3().style.background = "black"
   speed = velCima;
   speed2 = velDir;
 })
 
 f.c3().addEventListener('touchend', ()=>{
+  
+  zMenos = false;
   speed = 0;
   speed2 = 0;
   f.c3().style.background = "gray"
 })
+
+
 
 f.top().addEventListener('touchstart', ()=>{
   movTop = true
@@ -153,6 +215,7 @@ f.top().addEventListener('touchstart', ()=>{
 
 
 f.left().addEventListener('touchstart', ()=>{
+  
   movLeft = true
   f.left().style.background = "black"
 })
@@ -187,81 +250,4 @@ f.right().addEventListener('touchend', ()=>{
   movRigth = false
   f.right().style.background = "gray"
 })
-
-/*
-
-
-function update(){
-  updateBlock();
-  coliser();
-  
-}
-
-function draw2(){
-  
-    sizeWidth = 10
-    sizeHeight = 10
-    
-    ctx.clearRect(0,0,canvas.width, canvas.height)
-    ctx.fillStyle = "#000"
-    ctx.fillRect(blockX,blockY,sizeWidth,sizeHeight)
-    ctx.fillStyle = objColor;
-    ctx.fillRect(posX,posY,sizeWidth,sizeHeight)
-  
-}
-
-
-function draw(){
-  
-  
-    ctx.clearRect(0,0,canvas.width, canvas.height)
-    ctx.fillStyle = "#000"
-    ctx.fillRect(blockX,blockY,sizeWidth,sizeHeight)
-    ctx.fillStyle = objColor;
-    ctx.fillRect(posX,posY,sizeWidth,sizeHeight)
-  
-  
-  
-}
-
-
-
-
-
-
-function loop(){
-  
-  window.requestAnimationFrame(loop, canvas)
-    
-    
-    
-    if(coords.width > 379.21429443359375){
-    
-      draw2()
-    
-    } else {
-      
-      draw()
-      
-    }
-    
-  
-    update()
-    
-    
-    
-  
-  
-  
-}
-
-loop();
-
-
-
-
-
-*/
-
-
 
