@@ -172,19 +172,19 @@ function blockMap(){
 
 
 f.c2().addEventListener('touchstart', ()=>{
+  
   zMais = true;
-  f.c3().style.background = "black"
-  speed = velCima;
-  speed2 = velDir;
+  f.c2().style.background = "black"
+  
 })
 
 f.c2().addEventListener('touchend', ()=>{
   
   zMais = false;
-  speed = 0;
   
-  speed2 = 0;
-  f.c3().style.background = "gray"
+  
+  
+  f.c2().style.background = "gray"
 })
 
 
@@ -194,15 +194,13 @@ f.c2().addEventListener('touchend', ()=>{
 f.c3().addEventListener('touchstart', ()=>{
   zMenos = true;
   f.c3().style.background = "black"
-  speed = velCima;
-  speed2 = velDir;
+  
 })
 
 f.c3().addEventListener('touchend', ()=>{
   
   zMenos = false;
-  speed = 0;
-  speed2 = 0;
+  
   f.c3().style.background = "gray"
 })
 
